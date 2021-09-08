@@ -11,10 +11,17 @@ const client = new Client({
 	},
 })
 
-require('./db')
+client.on('messageCreate', (msg) => {
+	require('./events/message').code(client, msg)
+})
 
 client.once('ready', () => {
 	console.log(`| Bot Ready as ${client.user.tag}\n↳ ${new Date().toISOString()}`)
+	client.user.setPresence({ activities: [{ name: 'Cool Peps', type: 'WATCHING' }], afk: false, status: 'online' })
+
+	setInterval(() => {
+		client.user.setPresence({ activities: [{ name: 'Cool Peps', type: 'WATCHING' }], afk: false, status: 'online' })
+	}, 60000)
 })
 
 client.login(process.env.token)
