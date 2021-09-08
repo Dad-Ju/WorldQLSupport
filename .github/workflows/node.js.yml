@@ -25,4 +25,4 @@ jobs:
             - name: npm install, build and test
               run: npm ci
             - name: Test the Bot modules.
-              run: npm test
+              run: npm run test

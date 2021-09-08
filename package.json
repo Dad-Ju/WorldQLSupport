@@ -8,7 +8,8 @@
 	},
 	"scripts": {
 		"start": "npm i && node index.js",
-		"dev": "nodemon"
+		"dev": "nodemon",
+		"test": "echo 'Nothing to test for now :c'"
 	},
 	"repository": {
 		"type": "git",
