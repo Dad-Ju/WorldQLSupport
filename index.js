@@ -12,16 +12,19 @@ const client = new Client({
 })
 
 client.on('messageCreate', (msg) => {
-	require('./events/message').code(client, msg)
+	require('./events/faqmessagehandler').code(client, msg)
 })
 
 client.once('ready', () => {
 	console.log(`| Bot Ready as ${client.user.tag}\n↳ ${new Date().toISOString()}`)
 	client.user.setPresence({ activities: [{ name: 'Cool Peps', type: 'WATCHING' }], afk: false, status: 'online' })
+	require('./events/faqmessagehandler').init()
+	require('./events/queryBlog')(client)
 
 	setInterval(() => {
 		client.user.setPresence({ activities: [{ name: 'Cool Peps', type: 'WATCHING' }], afk: false, status: 'online' })
-	}, 60000)
+		require('./events/queryBlog')(client)
+	}, 30000)
 })
 
 client.login(process.env.token)
