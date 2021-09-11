@@ -8,7 +8,7 @@ const keySchema = new Schema({
 const faqSchema = new Schema({
 	displayname: { type: 'String', unique: true },
 	keys: [keySchema],
-	awnser: { type: 'String' },
+	anwser: { type: 'String' },
 })
 
 const FAQModel = MongooseModel('faqs', faqSchema, 'faq')

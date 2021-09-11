@@ -1,25 +1,23 @@
 const { FAQModule } = require('../db')
-let querys = []
+const { getTextFromImage } = require('../modules/ocr')
+const { test } = require('../modules/scantext')
 
-const init = async () => {
-	const questions = await FAQModule.find({})
-	// console.log('🚀 ~ file: message.js ~ line 6 ~ init ~ questions', questions)
+/**
+ *
+ * @param {import("discord.js").Client} client
+ * @param {import("discord.js").Message} msg
+ * @returns
+ */
+const code = async (client, msg) => {
+	if (msg.author.bot) return
+	const tosearch = msg.attachments.size === 1 ? await getTextFromImage(msg, msg.attachments.first().url) : msg.content
+	// console.log('🚀 ~ file: faqmessagehandler.js ~ line 13 ~ code ~ tosearch', tosearch)
 
-	if (typeof questions === 'undefined') return
+	const result = await test(tosearch)
 
-	questions.forEach((val) => {
-		val.keys.forEach((key) => querys.push({ id: val._id.toString(), query: key.query, weight: key.weight }))
-	})
+	if (typeof result !== 'undefined') return
+	const resultDB = await FAQModule.findById(result[0].id)
+	msg.reply(resultDB.anwser)
 }
 
-init()
-
-module.exports = {
-	init,
-	code: async (client, msg) => {
-		if (msg.author.bot) return
-		const couldbe = querys.filter((val) => msg.content.includes(val.query)).sort((a, b) => b.weight - a.weight)
-		if (couldbe.length <= 0) return
-		console.log(msg.content, couldbe)
-	},
-}
+module.exports = code
