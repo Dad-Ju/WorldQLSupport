@@ -26,21 +26,7 @@ const test = async (input) => {
 	if (couldbe.length <= 0) return undefined
 
 	// Sort by Points (i hate reduce magic ...)
-	const resultMap = couldbe.reduce((acc, keys) => {
-		// let cache = { ...acc }
-		for (i in keys) {
-			const query = keys[i]
-			// console.log(acc[query.id] + query.weight)
-			// TODO: Why isnt the short form working ????
-			// cache[query.id] = cache[query.id] ? cache[query.id] + querys.weight : query.weight
-			if (acc[query.id]) {
-				acc[query.id] += query.weight
-			} else {
-				acc[query.id] = query.weight
-			}
-		}
-		return acc
-	}, {})
+	const resultMap = couldbe.flat().reduce((acc, key) => ({ ...acc, [key.id]: acc[key.id] ? acc[key.id] + key.weight : key.weight }), {})
 
 	const result = Object.entries(resultMap).sort((a, b) => b[1] - a[1])
 	// console.log('🚀 ~ file: scantext.js ~ line 36 ~ result ~ result', result)
